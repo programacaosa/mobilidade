@@ -92,6 +92,15 @@
             font-size: 0.85rem; /* Diminuindo o tamanho da fonte */
             margin: 5px 0; /* Reduzindo a margem do texto */
         }
+        
+        .banner {
+            background-color: #FF6B00;
+            color: white;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            display: none; /* Inicialmente escondido */
+        }
 
         /* Ajustes para telas menores (celulares) */
         @media (max-width: 768px) {
@@ -129,15 +138,15 @@
     <div class="mb-3">
         <label for="destination" class="form-label">Onde Vamos</label>
         <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
-        <!-- Removido o botão "Usar Localização Atual" do segundo campo -->
     </div>
-    <button class="btn btn-primary" onclick="calculateRoute()">Inciar Chamado</button>
+    <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
 
-    <!-- Exibir resultados da rota -->
-    <div id="routeInfo" class="mt-3" style="display:none;">
+    <!-- Banner para mostrar informações da corrida -->
+    <div id="fareBanner" class="banner">
         <h5>Informações da Rota:</h5>
         <p id="distance"></p>
         <p id="duration"></p>
+        <p id="fare"></p> <!-- Para mostrar a tarifa calculada -->
     </div>
 
     <!-- Cards de Escolha de Carro -->
@@ -183,29 +192,6 @@
         // Inicializa autocomplete para os inputs de localização
         autocompletePickup = new google.maps.places.Autocomplete(document.getElementById('pickup'));
         autocompleteDestination = new google.maps.places.Autocomplete(document.getElementById('destination'));
-
-        // Tentativa de pegar a localização do usuário
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                var pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-
-                map.setCenter(pos);
-
-                // Coloca um marcador na localização do usuário
-                new google.maps.Marker({
-                    position: pos,
-                    map: map,
-                    title: "Sua localização"
-                });
-            }, function() {
-                alert('Erro ao obter sua localização!');
-            });
-        } else {
-            alert('Seu navegador não suporta geolocalização.');
-        }
     }
 
     function useCurrentLocation(inputId) {
@@ -250,16 +236,32 @@
                 // Obtém e exibe a distância e o tempo de viagem
                 const route = result.routes[0].legs[0];
                 document.getElementById("distance").innerText = "Distância: " + route.distance.text;
-                document.getElementById("duration").innerText = "Tempo de Viagem: " + route.duration.text;
-                document.getElementById("routeInfo").style.display = "block";
+                document.getElementById("duration").innerText = "Tempo: " + route.duration.text;
+
+                // Cálculo da tarifa
+                const distanceInKm = route.distance.value / 1000; // Distância em quilômetros
+                const fare = distanceInKm * 0.5; // Tarifa R$0,50 por quilômetro
+                document.getElementById("fare").innerText = "Tarifa: R$" + fare.toFixed(2);
+                
+                // Exibe o banner com as informações da corrida
+                document.getElementById("fareBanner").style.display = "block";
             } else {
                 alert('Não foi possível calcular a rota: ' + status);
             }
         });
     }
-</script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&libraries=places&callback=initMap"></script>
+    // Carrega a API do Google Maps
+    function loadScript() {
+        const script = document.createElement("script");
+        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&callback=initMap&libraries=places";
+        script.async = true;
+        document.body.appendChild(script);
+    }
+    
+    // Chama a função para carregar o script da API do Google Maps
+    loadScript();
+</script>
 
 </body>
 </html>
