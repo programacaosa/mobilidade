@@ -142,12 +142,16 @@
     <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
 
     <!-- Banner para mostrar informações da corrida -->
-    <div id="fareBanner" class="banner">
-        <h5>Informações da Rota:</h5>
-        <p id="distance"></p>
-        <p id="duration"></p>
-        <p id="fare"></p> <!-- Para mostrar a tarifa calculada -->
-    </div>
+<div id="fareBanner" class="banner">
+    <h5>Informações da Rota:</h5>
+    <p id="distance"></p>
+    <p id="duration"></p>
+    <p id="fare"></p> <!-- Para mostrar a tarifa calculada -->
+</div>
+
+<!-- Botão Solicitar Corrida -->
+<button id="requestRideBtn" class="btn btn-warning" style="display: none;" onclick="requestRide()">Solicitar Corrida</button>
+
 
     <!-- Cards de Escolha de Carro -->
     <div class="card-container">
@@ -174,7 +178,11 @@
     function openMenu() {
         document.getElementById("mySidebar").style.width = "250px";
     }
-
+	
+	function requestRide() {
+    alert("Solicitação de corrida enviada!");
+    // Aqui você pode adicionar a lógica para solicitar a corrida
+    }
     function closeMenu() {
         document.getElementById("mySidebar").style.width = "0";
     }
@@ -220,36 +228,37 @@
     }
 
     function calculateRoute() {
-        const pickup = document.getElementById("pickup").value;
-        const destination = document.getElementById("destination").value;
+    const pickup = document.getElementById("pickup").value;
+    const destination = document.getElementById("destination").value;
 
-        const request = {
-            origin: pickup,
-            destination: destination,
-            travelMode: google.maps.TravelMode.DRIVING
-        };
+    const request = {
+        origin: pickup,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING
+    };
 
-        directionsService.route(request, function(result, status) {
-            if (status === 'OK') {
-                directionsRenderer.setDirections(result);
-                
-                // Obtém e exibe a distância e o tempo de viagem
-                const route = result.routes[0].legs[0];
-                document.getElementById("distance").innerText = "Distância: " + route.distance.text;
-                document.getElementById("duration").innerText = "Tempo: " + route.duration.text;
+    directionsService.route(request, function(result, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(result);
+            
+            // Obtém e exibe a distância e o tempo de viagem
+            const route = result.routes[0].legs[0];
+            document.getElementById("distance").innerText = "Distância: " + route.distance.text;
+            document.getElementById("duration").innerText = "Tempo: " + route.duration.text;
 
-                // Cálculo da tarifa
-                const distanceInKm = route.distance.value / 1000; // Distância em quilômetros
-                const fare = distanceInKm * 0.5; // Tarifa R$0,50 por quilômetro
-                document.getElementById("fare").innerText = "Tarifa: R$" + fare.toFixed(2);
-                
-                // Exibe o banner com as informações da corrida
-                document.getElementById("fareBanner").style.display = "block";
-            } else {
-                alert('Não foi possível calcular a rota: ' + status);
-            }
-        });
-    }
+            // Cálculo da tarifa
+            const distanceInKm = route.distance.value / 1000; // Distância em quilômetros
+            const fare = distanceInKm * 0.5; // Tarifa R$0,50 por quilômetro
+            document.getElementById("fare").innerText = "Tarifa: R$" + fare.toFixed(2);
+            
+            // Exibe o banner com as informações da corrida
+            document.getElementById("fareBanner").style.display = "block";
+            document.getElementById("requestRideBtn").style.display = "block"; // Exibe o botão "Solicitar Corrida"
+        } else {
+            alert('Não foi possível calcular a rota: ' + status);
+        }
+    });
+}
 
     // Carrega a API do Google Maps
     function loadScript() {
