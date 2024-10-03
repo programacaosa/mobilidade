@@ -129,8 +129,16 @@
     <div class="mb-3">
         <label for="destination" class="form-label">Onde Vamos</label>
         <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
+        <!-- Removido o botão "Usar Localização Atual" do segundo campo -->
     </div>
     <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
+
+    <!-- Exibir resultados da rota -->
+    <div id="routeInfo" class="mt-3" style="display:none;">
+        <h5>Informações da Rota:</h5>
+        <p id="distance"></p>
+        <p id="duration"></p>
+    </div>
 
     <!-- Cards de Escolha de Carro -->
     <div class="card-container">
@@ -169,7 +177,7 @@
         });
 
         directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
+        directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
 
         // Inicializa autocomplete para os inputs de localização
@@ -238,17 +246,20 @@
         directionsService.route(request, function(result, status) {
             if (status === 'OK') {
                 directionsRenderer.setDirections(result);
-
-                // Exibir informações de tempo e distância
-                const route = result.routes[0];
-                const duration = route.legs[0].duration.text;
-                const distance = route.legs[0].distance.text;
-
-                alert(`Tempo: ${duration}, Distância: ${distance}`);
+                
+                // Obtém e exibe a distância e o tempo de viagem
+                const route = result.routes[0].legs[0];
+                document.getElementById("distance").innerText = "Distância: " + route.distance.text;
+                document.getElementById("duration").innerText = "Tempo de Viagem: " + route.duration.text;
+                document.getElementById("routeInfo").style.display = "block";
             } else {
                 alert('Não foi possível calcular a rota: ' + status);
             }
         });
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndP
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&libraries=places&callback=initMap"></script>
+
+</body>
+</html>
