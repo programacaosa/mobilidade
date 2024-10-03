@@ -124,10 +124,12 @@
     <div class="mb-3">
         <label for="pickup" class="form-label">Onde Buscar</label>
         <input type="text" class="form-control" id="pickup" placeholder="Informe o local de busca">
+        <button class="btn btn-secondary mt-2" onclick="useCurrentLocation('pickup')">Usar Localização Atual</button>
     </div>
     <div class="mb-3">
         <label for="destination" class="form-label">Onde Vamos</label>
         <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
+        <button class="btn btn-secondary mt-2" onclick="useCurrentLocation('destination')">Usar Localização Atual</button>
     </div>
     <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
 
@@ -150,6 +152,8 @@
     let map;
     let directionsService;
     let directionsRenderer;
+    let autocompletePickup;
+    let autocompleteDestination;
 
     function openMenu() {
         document.getElementById("mySidebar").style.width = "250px";
@@ -168,6 +172,10 @@
         directionsService = new google.maps.DirectionsService();
         directionsRenderer = new google.maps.DirectionsRenderer();
         directionsRenderer.setMap(map);
+
+        // Inicializa autocomplete para os inputs de localização
+        autocompletePickup = new google.maps.places.Autocomplete(document.getElementById('pickup'));
+        autocompleteDestination = new google.maps.places.Autocomplete(document.getElementById('destination'));
 
         // Tentativa de pegar a localização do usuário
         if (navigator.geolocation) {
@@ -193,6 +201,31 @@
         }
     }
 
+    function useCurrentLocation(inputId) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                // Usar o serviço de Geocoding para obter o endereço
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'location': pos}, function(results, status) {
+                    if (status === 'OK' && results[0]) {
+                        document.getElementById(inputId).value = results[0].formatted_address;
+                    } else {
+                        alert('Não foi possível obter o endereço da localização atual.');
+                    }
+                });
+            }, function() {
+                alert('Erro ao obter sua localização!');
+            });
+        } else {
+            alert('Seu navegador não suporta geolocalização.');
+        }
+    }
+
     function calculateRoute() {
         const pickup = document.getElementById("pickup").value;
         const destination = document.getElementById("destination").value;
@@ -206,18 +239,12 @@
         directionsService.route(request, function(result, status) {
             if (status === 'OK') {
                 directionsRenderer.setDirections(result);
-                const route = result.routes[0];
-                const duration = route.legs[0].duration.text;
-                alert(`A duração da viagem é: ${duration}`);
             } else {
                 alert('Não foi possível calcular a rota: ' + status);
             }
         });
     }
 </script>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&callback=initMap">
-</script>
-
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&libraries=places&callback=initMap"></script>
 </body>
 </html>
