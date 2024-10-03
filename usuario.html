@@ -71,7 +71,7 @@
             display: flex;
             justify-content: space-around;
             padding: 20px;
-            flex-wrap: wrap; /* Flexível para caber em diferentes tamanhos de tela */
+            flex-wrap: nowrap; /* Cards lado a lado */
         }
         .card-custom {
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -93,11 +93,11 @@
         /* Ajustes para telas menores (celulares) */
         @media (max-width: 768px) {
             .card-container {
-                flex-direction: column; /* Cards empilhados em uma coluna */
-                align-items: center;    /* Centralizar os cards */
+                flex-wrap: wrap; /* Cards se ajustam lado a lado e com quebra de linha */
             }
             .card-custom {
-                width: 80%; /* Cards maiores em telas pequenas */
+                width: 80%; /* Cards ocupam 80% da largura da tela */
+                margin: 10px auto; /* Centraliza os cards */
             }
         }
     </style>
