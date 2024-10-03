@@ -68,18 +68,17 @@
             font-weight: bold;
         }
         .card-container {
-            display: flex;
-            justify-content: space-around;
+            display: flex; /* Usar Flexbox para alinhar os cards */
+            justify-content: space-between; /* Espaço entre os cards */
             padding: 20px;
-            flex-wrap: nowrap; /* Cards lado a lado */
         }
         .card-custom {
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             border-radius: 10px;
-            width: 30%;
+            width: 48%; /* Ajustado para ocupar 48% da largura */
             text-align: center;
-            padding: 20px;
-            margin: 10px;
+            padding: 10px; /* Reduzindo o padding do card */
+            margin: 10px 0; /* Apenas margem em cima e embaixo */
             transition: transform 0.2s;
         }
         .card-custom:hover {
@@ -89,15 +88,15 @@
             width: 100%;
             border-radius: 10px;
         }
+        .card-custom h5, .card-custom p {
+            font-size: 0.85rem; /* Diminuindo o tamanho da fonte */
+            margin: 5px 0; /* Reduzindo a margem do texto */
+        }
 
         /* Ajustes para telas menores (celulares) */
         @media (max-width: 768px) {
-            .card-container {
-                flex-wrap: wrap; /* Cards se ajustam lado a lado e com quebra de linha */
-            }
             .card-custom {
-                width: 80%; /* Cards ocupam 80% da largura da tela */
-                margin: 10px auto; /* Centraliza os cards */
+                width: 100%; /* Cards ocupam toda a largura em telas pequenas */
             }
         }
     </style>
@@ -134,19 +133,14 @@
     <!-- Cards de Escolha de Carro -->
     <div class="card-container">
         <div class="card-custom">
-            <img src="https://via.placeholder.com/150x100?text=Carro+Popular" alt="Carro Popular">
+            <img src="https://i.pinimg.com/474x/f2/9a/6a/f29a6a545a905ca3d72a698e3f804bd1.jpg" alt="Carro Popular">
             <h5>Carro Popular</h5>
             <p>Viagem econômica e prática</p>
         </div>
         <div class="card-custom">
-            <img src="https://via.placeholder.com/150x100?text=Carro+Executivo" alt="Carro Executivo">
+            <img src="https://i.pinimg.com/474x/f2/9a/6a/f29a6a545a905ca3d72a698e3f804bd1.jpg" alt="Carro Executivo">
             <h5>Carro Executivo</h5>
             <p>Conforto e estilo</p>
-        </div>
-        <div class="card-custom">
-            <img src="https://via.placeholder.com/150x100?text=SUV" alt="SUV">
-            <h5>SUV</h5>
-            <p>Espaço para toda a família</p>
         </div>
     </div>
 </div>
