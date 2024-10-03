@@ -129,6 +129,7 @@
         <label for="destination" class="form-label">Onde Vamos</label>
         <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
     </div>
+    <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
 
     <!-- Cards de Escolha de Carro -->
     <div class="card-container">
@@ -146,6 +147,10 @@
 </div>
 
 <script>
+    let map;
+    let directionsService;
+    let directionsRenderer;
+
     function openMenu() {
         document.getElementById("mySidebar").style.width = "250px";
     }
@@ -156,10 +161,15 @@
 
     // Inicializa o Google Maps com geolocalização
     function initMap() {
-        var map = new google.maps.Map(document.getElementById('map'), {
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        
+        map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: {lat: -23.55052, lng: -46.633308} // Localização padrão (São Paulo)
         });
+        
+        directionsRenderer.setMap(map); // Define o mapa onde a rota será exibida
 
         // Tentativa de pegar a localização do usuário
         if (navigator.geolocation) {
@@ -184,9 +194,30 @@
             alert('Seu navegador não suporta geolocalização.');
         }
     }
+
+    // Função para calcular e exibir a rota
+    function calculateRoute() {
+        const pickup = document.getElementById('pickup').value;
+        const destination = document.getElementById('destination').value;
+
+        const request = {
+            origin: pickup,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+        };
+
+        directionsService.route(request, function(result, status) {
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setDirections(result);
+                alert(`Tempo estimado: ${result.routes[0].legs[0].duration.text}`); // Exibe o tempo estimado em um alerta
+            } else {
+                alert('Não foi possível calcular a rota: ' + status);
+            }
+        });
+    }
 </script>
 <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
 </script>
 
 </body>
