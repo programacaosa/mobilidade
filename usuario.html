@@ -129,7 +129,6 @@
     <div class="mb-3">
         <label for="destination" class="form-label">Onde Vamos</label>
         <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
-        <button class="btn btn-secondary mt-2" onclick="useCurrentLocation('destination')">Usar Localização Atual</button>
     </div>
     <button class="btn btn-primary" onclick="calculateRoute()">Calcular Rota</button>
 
@@ -170,7 +169,7 @@
         });
 
         directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
         directionsRenderer.setMap(map);
 
         // Inicializa autocomplete para os inputs de localização
@@ -239,12 +238,17 @@
         directionsService.route(request, function(result, status) {
             if (status === 'OK') {
                 directionsRenderer.setDirections(result);
+
+                // Exibir informações de tempo e distância
+                const route = result.routes[0];
+                const duration = route.legs[0].duration.text;
+                const distance = route.legs[0].distance.text;
+
+                alert(`Tempo: ${duration}, Distância: ${distance}`);
             } else {
                 alert('Não foi possível calcular a rota: ' + status);
             }
         });
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&libraries=places&callback=initMap"></script>
-</body>
-</html>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndP
