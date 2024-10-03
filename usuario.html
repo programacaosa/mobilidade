@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Mobilidade Urbana</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: calc(100vh - 60px); /* Abaixo do header */
+        }
+        header {
+            background-color: #FF6B00;
+            color: white;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        .logo {
+            height: 50px;
+        }
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: white;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #333;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+            z-index: 1000;
+        }
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: white;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            color: #FF6B00;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 25px;
+            font-size: 36px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="menu-btn" onclick="openMenu()">&#9776;</button> <!-- Menu Hambúrguer -->
+    <img src="https://anptrilhos.org.br/wp-content/uploads/2019/02/logo-viamobilidade2.png" alt="Logo" class="logo">
+</header>
+
+<!-- Menu Lateral -->
+<div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="close-btn" onclick="closeMenu()">×</a>
+    <a href="#">Início</a>
+    <a href="#">Perfil</a>
+    <a href="#">Configurações</a>
+</div>
+
+<!-- Mapa do Google -->
+<div id="map"></div>
+
+<script>
+    function openMenu() {
+        document.getElementById("mySidebar").style.width = "250px";
+    }
+
+    function closeMenu() {
+        document.getElementById("mySidebar").style.width = "0";
+    }
+
+    // Inicializa o Google Maps com geolocalização
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: {lat: -23.55052, lng: -46.633308} // Localização padrão (São Paulo)
+        });
+
+        // Tentativa de pegar a localização do usuário
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                map.setCenter(pos);
+
+                // Coloca um marcador na localização do usuário
+                new google.maps.Marker({
+                    position: pos,
+                    map: map,
+                    title: "Sua localização"
+                });
+            }, function() {
+                alert('Erro ao obter sua localização!');
+            });
+        } else {
+            alert('Seu navegador não suporta geolocalização.');
+        }
+    }
+</script>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+</script>
+
+</body>
+</html>
