@@ -159,17 +159,15 @@
         document.getElementById("mySidebar").style.width = "0";
     }
 
-    // Inicializa o Google Maps com geolocalização
     function initMap() {
-        directionsService = new google.maps.DirectionsService();
-        directionsRenderer = new google.maps.DirectionsRenderer();
-        
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: {lat: -23.55052, lng: -46.633308} // Localização padrão (São Paulo)
         });
-        
-        directionsRenderer.setMap(map); // Define o mapa onde a rota será exibida
+
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer();
+        directionsRenderer.setMap(map);
 
         // Tentativa de pegar a localização do usuário
         if (navigator.geolocation) {
@@ -195,10 +193,9 @@
         }
     }
 
-    // Função para calcular e exibir a rota
     function calculateRoute() {
-        const pickup = document.getElementById('pickup').value;
-        const destination = document.getElementById('destination').value;
+        const pickup = document.getElementById("pickup").value;
+        const destination = document.getElementById("destination").value;
 
         const request = {
             origin: pickup,
@@ -207,9 +204,11 @@
         };
 
         directionsService.route(request, function(result, status) {
-            if (status === google.maps.DirectionsStatus.OK) {
+            if (status === 'OK') {
                 directionsRenderer.setDirections(result);
-                alert(`Tempo estimado: ${result.routes[0].legs[0].duration.text}`); // Exibe o tempo estimado em um alerta
+                const route = result.routes[0];
+                const duration = route.legs[0].duration.text;
+                alert(`A duração da viagem é: ${duration}`);
             } else {
                 alert('Não foi possível calcular a rota: ' + status);
             }
@@ -217,7 +216,7 @@
     }
 </script>
 <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcLcrlxZWCq5zNDyRMlsTndPHT7lNNwJA&callback=initMap">
 </script>
 
 </body>
