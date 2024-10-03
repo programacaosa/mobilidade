@@ -12,7 +12,7 @@
             padding: 0;
         }
         #map {
-            height: calc(100vh - 60px); /* Abaixo do header */
+            height: 50vh; /* Abaixo do header */
         }
         header {
             background-color: #FF6B00;
@@ -61,6 +61,32 @@
             right: 25px;
             font-size: 36px;
         }
+        .form-container {
+            padding: 20px;
+        }
+        .form-container .form-label {
+            font-weight: bold;
+        }
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .card-custom {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            width: 30%;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .card-custom:hover {
+            transform: scale(1.05);
+        }
+        .card-custom img {
+            width: 100%;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -80,6 +106,37 @@
 
 <!-- Mapa do Google -->
 <div id="map"></div>
+
+<!-- Formulário e Cards de Escolha de Carro -->
+<div class="form-container container">
+    <div class="mb-3">
+        <label for="pickup" class="form-label">Onde Buscar</label>
+        <input type="text" class="form-control" id="pickup" placeholder="Informe o local de busca">
+    </div>
+    <div class="mb-3">
+        <label for="destination" class="form-label">Onde Vamos</label>
+        <input type="text" class="form-control" id="destination" placeholder="Informe o destino">
+    </div>
+
+    <!-- Cards de Escolha de Carro -->
+    <div class="card-container">
+        <div class="card-custom">
+            <img src="https://via.placeholder.com/150x100?text=Carro+Popular" alt="Carro Popular">
+            <h5>Carro Popular</h5>
+            <p>Viagem econômica e prática</p>
+        </div>
+        <div class="card-custom">
+            <img src="https://via.placeholder.com/150x100?text=Carro+Executivo" alt="Carro Executivo">
+            <h5>Carro Executivo</h5>
+            <p>Conforto e estilo</p>
+        </div>
+        <div class="card-custom">
+            <img src="https://via.placeholder.com/150x100?text=SUV" alt="SUV">
+            <h5>SUV</h5>
+            <p>Espaço para toda a família</p>
+        </div>
+    </div>
+</div>
 
 <script>
     function openMenu() {
